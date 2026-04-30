@@ -1,10 +1,10 @@
-# RevenueCat & Adjust → BigQuery Pipeline
+# 🚀 RevenueCat & Adjust → BigQuery Pipeline
 
-A Python ETL pipeline that extracts subscription cohorts from **RevenueCat** and attribution metrics from **Adjust**, transforms and loads them into **Google BigQuery**, and runs automatically on a schedule via **GitHub Actions**.
+A scalable **Python ETL pipeline** that extracts subscription cohorts from **RevenueCat** and attribution metrics from **Adjust**, transforms them, and loads into **Google BigQuery** — fully automated via **GitHub Actions**.
 
 ---
 
-## Architecture
+## 🧠 Architecture
 
 ```
 RevenueCat API          Adjust Reporting API
@@ -24,138 +24,163 @@ revenuecat_cohort_export   adjust_to_bigquery
 
 ---
 
-## Features
+## ✨ Features
 
-- **RevenueCat Cohort Export** — Fetches Realized LTV and Proceeds across countries and platforms for configurable cohort time windows (D0, D7, D30, D90, D180, D365)
-- **Adjust → BigQuery** — Parallel chunked fetching with pagination, exponential backoff retry, and a hard row-cap safety guard
-- **GitHub Actions Orchestration** — Fully automated, scheduled pipeline execution with no manual intervention required
-- **Rate-limit aware** — Respects RevenueCat v2 (15 req/min) and Adjust API limits
-- **Clean schema** — Column renaming and type casting before BigQuery load
-- **Zero hardcoded secrets** — All credentials stored as GitHub Actions secrets and loaded via environment variables
+- 📊 **RevenueCat Cohort Export**  
+  Extracts *Realized LTV* and *Proceeds* across countries & platforms  
+  Supports cohort windows: **D0, D7, D30, D90, D180, D365**
+
+- ⚡ **Adjust → BigQuery Pipeline**  
+  - Parallel chunk processing  
+  - Pagination handling  
+  - Exponential backoff retry  
+  - Row-cap safety guard  
+
+- 🤖 **Automated Orchestration**  
+  Runs via GitHub Actions — no manual execution required  
+
+- ⏱️ **Rate-Limit Aware**  
+  - RevenueCat v2 → 15 req/min  
+  - Handles Adjust API limits  
+
+- 🧹 **Clean Schema**  
+  Column renaming + type casting before BigQuery load  
+
+- 🔐 **Secure Setup**  
+  No hardcoded secrets — uses env variables & GitHub Secrets  
 
 ---
 
-## Tech Stack
+## 🧰 Tech Stack
 
 - Python 3.11+
-- `requests` for API calls
-- `google-cloud-bigquery` for BQ load
-- `python-dotenv` for local credential management
-- `concurrent.futures` for parallel chunk fetching
-- GitHub Actions for pipeline scheduling and orchestration
+- requests  
+- google-cloud-bigquery  
+- python-dotenv  
+- concurrent.futures  
+- GitHub Actions  
 
 ---
 
-## Setup
+## ⚙️ Setup
 
-### 1. Clone the repo
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/your-username/revenuecat-adjust-bigquery-pipeline.git
 cd revenuecat-adjust-bigquery-pipeline
 ```
 
-### 2. Install dependencies
+### 2. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Configure credentials (local)
+### 3. Configure Environment
 
 ```bash
 cp .env.example .env
 ```
 
-Fill in `.env` with your credentials (see table below). Place your GCP service account JSON file in the project root (it is gitignored).
+- Fill in credentials in `.env`  
+- Add GCP service account JSON in root (gitignored)  
 
-### 4. Run locally
+### 4. Run Locally
 
 ```bash
-# Export RevenueCat cohort data to CSV
+# Export RevenueCat cohort data
 python src/revenuecat_cohort_export.py
 
-# Fetch Adjust data and load to BigQuery
+# Fetch Adjust data → Load into BigQuery
 python src/adjust_to_bigquery.py
 ```
 
 ---
 
-## GitHub Actions Orchestration
+## 🤖 GitHub Actions
 
-The pipeline is fully automated using GitHub Actions. It runs on a defined schedule and requires no manual execution.
+Workflow path:
 
-### Setting up secrets
+```
+.github/workflows/pipeline.yml
+```
 
-Add the following secrets in your GitHub repository under **Settings → Secrets and variables → Actions**:
+### Required Secrets
+
+Add in **Settings → Secrets and variables → Actions**
 
 | Secret | Description |
-|---|---|
-| `RC_PROJECT_ID` | RevenueCat project ID |
-| `RC_SECRET_API_KEY` | RevenueCat v2 API key |
-| `ADJUST_API_TOKEN` | Adjust API bearer token |
-| `ADJUST_APP_TOKEN` | Adjust app token |
-| `BQ_PROJECT_ID` | Google Cloud project ID |
-| `BQ_DATASET` | BigQuery dataset name |
-| `BQ_TABLE` | BigQuery table name |
-| `GCP_SERVICE_ACCOUNT_JSON` | Full contents of your GCP service account JSON |
+|------|-------------|
+| RC_PROJECT_ID | RevenueCat project ID |
+| RC_SECRET_API_KEY | RevenueCat v2 API key |
+| ADJUST_API_TOKEN | Adjust API token |
+| ADJUST_APP_TOKEN | Adjust app token |
+| BQ_PROJECT_ID | GCP project ID |
+| BQ_DATASET | BigQuery dataset |
+| BQ_TABLE | BigQuery table |
+| GCP_SERVICE_ACCOUNT_JSON | Service account JSON |
 
-### Workflow location
-
-```
-.github/
-└── workflows/
-    └── pipeline.yml
-```
-
-The workflow triggers on a cron schedule and can also be triggered manually via `workflow_dispatch`.
+Supports:
+- Cron scheduling  
+- Manual trigger (`workflow_dispatch`)  
 
 ---
 
-## Environment Variables (local)
+## 🌍 Environment Variables
 
 | Variable | Description |
-|---|---|
-| `RC_PROJECT_ID` | RevenueCat project ID |
-| `RC_SECRET_API_KEY` | RevenueCat **v2** API key (`charts_metrics:charts:read`) |
-| `RC_START_DATE` | Export start date (`YYYY-MM-DD`) |
-| `RC_END_DATE` | Export end date (`YYYY-MM-DD`) |
-| `ADJUST_API_TOKEN` | Adjust API bearer token |
-| `ADJUST_APP_TOKEN` | Adjust app token |
-| `ADJUST_START_DATE` | Fetch start date |
-| `ADJUST_END_DATE` | Fetch end date |
-| `BQ_PROJECT_ID` | Google Cloud project ID |
-| `BQ_DATASET` | BigQuery dataset name |
-| `BQ_TABLE` | BigQuery table name |
-| `SERVICE_ACCOUNT_JSON_PATH` | Path to GCP service account JSON |
+|----------|------------|
+| RC_PROJECT_ID | RevenueCat project ID |
+| RC_SECRET_API_KEY | RevenueCat v2 API key |
+| RC_START_DATE | Start date (YYYY-MM-DD) |
+| RC_END_DATE | End date |
+| ADJUST_API_TOKEN | Adjust API token |
+| ADJUST_APP_TOKEN | Adjust app token |
+| ADJUST_START_DATE | Start date |
+| ADJUST_END_DATE | End date |
+| BQ_PROJECT_ID | GCP project ID |
+| BQ_DATASET | Dataset |
+| BQ_TABLE | Table |
+| SERVICE_ACCOUNT_JSON_PATH | Path to JSON |
 
-> ⚠️ **Never commit `.env` or your service account JSON.** Both are in `.gitignore`.
-
----
-
-## RevenueCat API Note
-
-This script uses the **RevenueCat REST API v2**. v1 keys (`sk_...`) will return 401 errors.
-
-Create a v2 key at:
-`RevenueCat Dashboard → Project Settings → API Keys → + New`
-
-Required permission: `charts_metrics:charts:read`
+> ⚠️ Never commit `.env` or service account JSON files.
 
 ---
 
-## BigQuery Schema
+## 📡 RevenueCat API Note
 
-The Adjust pipeline loads the following cohort windows: **D0, D7, D15, D30, D60, D90** for:
-- `lifetime_value`
-- `all_revenue_total`
-- `paying_users`
-- `retained_users`
+- Uses **REST API v2**
+- v1 keys (`sk_...`) → 401 error  
+- Required permission:  
+  `charts_metrics:charts:read`
 
-Plus standard campaign dimensions: campaign, adgroup, creative, country, platform, data source.
+Create via:  
+Dashboard → Project Settings → API Keys → + New  
 
 ---
 
-## License
+## 🧱 BigQuery Schema
 
-MIT
+### Cohort Windows
+**D0, D7, D15, D30, D60, D90**
+
+### Metrics
+- lifetime_value  
+- all_revenue_total  
+- paying_users  
+- retained_users  
+
+### Dimensions
+- campaign  
+- adgroup  
+- creative  
+- country  
+- platform  
+- data_source  
+
+---
+
+## 📜 License
+
+MIT License
