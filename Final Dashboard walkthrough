@@ -1,0 +1,44 @@
+# Final Dashboard
+
+This is the final output of the pipeline — a live dashboard built on top of the data loaded into BigQuery by this pipeline.
+
+It showcases the end-to-end result: from raw API data fetched via RevenueCat and Adjust, transformed and loaded into BigQuery, and visualized as a fully interactive analytics dashboard.
+
+---
+
+## Dashboard Preview
+
+▶️ **[Click here to watch the dashboard walkthrough](https://drive.google.com/file/d/1HXtQ85aWRUNxUc_eR8qhpgWjuuMOvErz/view?usp=sharing)**
+
+---
+
+## What the Dashboard Shows
+
+- **Subscription cohort LTV** — Realized LTV and Proceeds across D0, D7, D30, D90, D180, D365 windows
+- **Attribution metrics** — Installs, paid installs, ad spend, impressions, clicks by campaign and adgroup
+- **Cohort revenue trends** — Revenue breakdown by country (US, GB, AU, CA) and platform (iOS, Android)
+- **Retention & paying users** — Cohort-level paying and retained user counts across time windows
+- **Revenue to cost ratio** — Campaign-level ROAS tracking
+
+---
+
+## Pipeline → Dashboard Flow
+
+```
+RevenueCat API  +  Adjust API
+        │
+        ▼
+   Python ETL Pipeline
+   (parallel fetch, transform, load)
+        │
+        ▼
+   Google BigQuery
+        │
+        ▼
+   Dashboard (visualized output)
+```
+
+---
+
+> This dashboard is the final deliverable of the pipeline defined in this repository.
+> See [README.md](./README.md) for full setup and pipeline details.
