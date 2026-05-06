@@ -1,4 +1,4 @@
-# 🚀 RevenueCat & Adjust → BigQuery Pipeline
+# 🚀 RevenueCat & Adjust → BigQuery Pipeline.
 
 A scalable **Python ETL pipeline** that extracts subscription cohorts from **RevenueCat** and attribution metrics from **Adjust**, transforms them, and loads into **Google BigQuery** — fully automated via **GitHub Actions**.
 
